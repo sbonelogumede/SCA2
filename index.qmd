@@ -1,0 +1,18 @@
+---
+title: "Assignment 2"
+author: "Sbonelo Gumede"
+date: "09-03-2025"
+output: html
+---
+
+This is the homepage for assignment 2.
+
+To find the code for this assignment visit <https://github.com/sbonelogumede/SCA2.git>.
+
+::: {#fig-dm}
+
+![](images/dm.png)
+
+Data Visualization (Google DeepMind).
+
+:::

@@ -1,0 +1,28 @@
+project:
+  type: website
+
+website:
+  title: "Statistical Computing"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: q1.qmd
+        text: Question 1
+      - href: q2.qmd
+        text: Question 2
+      - href: q3.qmd
+        text: Question 3
+      - href: q4.qmd
+        text: Question 4
+      - href: q5.qmd
+        text: Question 5
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+
+
+

@@ -1,0 +1,26 @@
+---
+title: "Question 1"
+author: "Sbonelo Gumede"
+date: "`r Sys.Date()`"
+output: html
+---
+
+```{r setup, echo=FALSE, include=FALSE}
+library(foreach)
+library(knitr)
+
+opts_chunk$set(echo=FALSE, include=FALSE)
+```
+
+```{r, echo=TRUE, include=TRUE}
+results <- foreach(i=1:100, .combine="rbind") %do% 
+	{
+		S <- rexp(n = 100, rate = 1)
+		c(mean(S), var(S))
+	}
+
+colnames(results, do.NULL = FALSE)
+colnames(results) <- c("Mean", "Variance")
+rownames(results) <- 1:100
+kable(results)
+```

@@ -1,0 +1,45 @@
+---
+title: "Question 3"
+author: "Sbonelo Gumede"
+date: "`r Sys.Date()`"
+output: html
+---
+
+```{r setup, echo=FALSE, include=FALSE}
+library(foreach)
+library(knitr)
+
+opts_chunk$set(echo=FALSE, include=FALSE)
+```
+
+```{r, echo=TRUE, include=TRUE}
+N <- 50 # Sample size
+dat <- rexp(n = N, rate = 1) # Random sample from the exponential distribution
+
+B <- 10000 # Number of bootstrap samples
+meanVector <- foreach(i=1:B, .combine="c") %do% 
+	{
+		S <- sample(x = dat, size = N, replace = TRUE) # Bootstrap sample
+		mean(S) # Bootstrap sample mean
+	}
+
+# Sample mean
+sampleMean <- mean(dat)
+kable(x = sampleMean, col.names = c("Sample Mean"))
+
+# Bootstrap mean estimate
+bootstrapMean <- mean(meanVector)
+kable(x = bootstrapMean, col.names = c("Bootstrap Mean Estimate"))
+
+# Bias estimate
+bias <- bootstrapMean - sampleMean
+kable(x = bias, col.names = c("Bias Estimate"))
+
+# Standard error estimate
+se <- sd(meanVector)
+kable(x = se, col.names = c("Standard Error Estimate"))
+
+# 95% Percentile confidence interval
+ci <- quantile(x = meanVector, c(0.025, 0.975))
+kable(x = ci, col.names = c("95% Percentile Confidence Interval"))
+```

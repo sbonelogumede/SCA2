@@ -1,0 +1,69 @@
+---
+title: "Question 2"
+author: "Sbonelo Gumede"
+date: "`r Sys.Date()`"
+output: html
+---
+
+```{r setup, echo=FALSE, include=FALSE}
+library(doParallel)
+library(foreach)
+library(knitr)
+library(MASS)
+
+opts_chunk$set(echo=FALSE, include=FALSE)
+```
+
+```{r, echo=TRUE, include=TRUE}
+coreNumber <- detectCores() # Get number of cores in the computing device
+myCluster <- makeCluster(coreNumber - 1) # Set n-1 of those cores for computing
+registerDoParallel(myCluster) # Register these cores for computing
+
+dat <- galaxies # Galaxies data set from the MASS library
+
+clusterExport(myCluster, "dat") # Copy the data across the allocated cores
+
+N <- 1000 # Number of bootstrap iterations
+medianVector <- numeric(N) # Stores the bootstrapped median estimates
+
+f.foreach <- function() # Parallel bootstrapping
+	{
+		medianVector <<- foreach(i = 1:N, .combine = "c") %dopar% 
+		{
+			S <- sample(x = dat, size = length(dat), replace = TRUE)
+			median(x = S) # Find the median for this bootstrap sample
+		}
+}
+
+f.for <- function() # Serial bootstrapping
+	{	
+		for(i in 1:N)
+			{
+				S <- sample(x = dat, size = length(dat), replace = TRUE)
+				medianVector[i] <<- median(x = S)
+			}
+	}
+
+system.time(f.foreach()) # Parallel Performance
+system.time(f.for()) # Serial Performance
+# Processing time for parallel computing exceeds processing time for serial comp
+# -uting
+
+# Bias
+sampleMedian <- median(x = dat)
+kable(x = sampleMedian, col.names = c("Sample Median"))
+bootstrapMedian <- mean(x = medianVector)
+kable(x = bootstrapMedian, col.names = c("Bootstrap Median Estimate"))
+bias <- bootstrapMedian - sampleMedian
+kable(x = bias, col.names = c("Bias Estimate"))
+
+# Standard Error
+se <- sd(medianVector)
+kable(x = se, col.names = c("Standard Error Estimate"))
+
+# 95% Percentile Confidence Interval
+ci <- quantile(x = medianVector, c(0.025, 0.975))
+kable(x = ci, col.names = c("95% Percentile Confidence Interval"))
+
+stopCluster(myCluster) # Close the cluster
+```

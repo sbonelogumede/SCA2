@@ -1,0 +1,28 @@
+---
+title: "Question 4"
+author: "Sbonelo Gumede"
+date: "`r Sys.Date()`"
+output: html
+---
+
+```{r setup, echo=FALSE, include=FALSE}
+library(foreach)
+library(iterators)
+library(knitr)
+
+opts_chunk$set(echo=FALSE, include=FALSE)
+```
+
+```{r, echo=TRUE, include=TRUE}
+set.seed(1234)
+
+# Generate 3 vectors of size 5 from the normal distribution
+normalVector <- irnorm(n = 5, mean = 0, sd = 1, count = 3)
+
+maximumVector <- foreach(i = 1:3, .combine = "c") %do% 
+	{
+		max(nextElem(normalVector)) # Get the next vector and find its maximum
+	}
+
+kable(x = maximumVector, col.names = c("Column Maximums"))
+```

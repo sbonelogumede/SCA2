@@ -1,0 +1,53 @@
+---
+title: "Question 5"
+author: "Sbonelo Gumede"
+date: "`r Sys.Date()`"
+output: html
+---
+
+```{r setup, echo=FALSE, include=FALSE}
+library(doParallel)
+library(foreach)
+library(iterators)
+library(knitr)
+library(parallel)
+
+opts_chunk$set(echo=FALSE, include=FALSE)
+```
+
+```{r, echo=TRUE, include=TRUE}
+coresNumber = detectCores()
+myCluster <- makeCluster(coresNumber - 1)
+registerDoParallel(myCluster)
+
+# Generate 3 vectors of size 5 from the normal distribution
+normalVector <- irnorm(n = 5, mean = 0, sd = 1, count = 3)
+clusterExport(myCluster, c("normalVector", "nextElem"))
+
+f.foreach <- function()
+{
+	maximumVector <<- foreach(i = 1:3, .combine = "c") %dopar% 
+		{
+			max(nextElem(normalVector)) # Get the next vector and find its maximum
+		}
+}
+
+f.parLapply <- function()
+{
+	maximumVector <<- parLapply(myCluster, 1:3, function(i)
+	{
+		max(nextElem(normalVector)) # Get the next vector and find its maximum
+	})
+}
+
+f.replicate <- function()
+{
+	maximumVector <<- replicate(n = 3, expr = max(nextElem(normalVector)))
+}
+
+system.time(f.foreach())
+system.time(f.parLapply())
+system.time(f.replicate())
+
+stopCluster(myCluster)
+```

@@ -1,0 +1,37 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Assignment 2",
+    "section": "",
+    "text": "This is the homepage for assignment 2.\nTo find the code for this assignment visit https://github.com/sbonelogumede/SCA2.git.\n\n\n\n\n\n\nFigure 1: Data Visualization (Google DeepMind)."
+  },
+  {
+    "objectID": "q5.html",
+    "href": "q5.html",
+    "title": "Question 5",
+    "section": "",
+    "text": "coresNumber = detectCores()\nmyCluster &lt;- makeCluster(coresNumber - 1)\nregisterDoParallel(myCluster)\n\n# Generate 3 vectors of size 5 from the normal distribution\nnormalVector &lt;- irnorm(n = 5, mean = 0, sd = 1, count = 3)\nclusterExport(myCluster, c(\"normalVector\", \"nextElem\"))\n\nf.foreach &lt;- function()\n{\n    maximumVector &lt;&lt;- foreach(i = 1:3, .combine = \"c\") %dopar% \n        {\n            max(nextElem(normalVector)) # Get the next vector and find its maximum\n        }\n}\n\nf.parLapply &lt;- function()\n{\n    maximumVector &lt;&lt;- parLapply(myCluster, 1:3, function(i)\n    {\n        max(nextElem(normalVector)) # Get the next vector and find its maximum\n    })\n}\n\nf.replicate &lt;- function()\n{\n    maximumVector &lt;&lt;- replicate(n = 3, expr = max(nextElem(normalVector)))\n}\n\nsystem.time(f.foreach())\n\n   user  system elapsed \n   0.00    0.00    0.03 \n\nsystem.time(f.parLapply())\n\n   user  system elapsed \n      0       0       0 \n\nsystem.time(f.replicate())\n\n   user  system elapsed \n      0       0       0 \n\nstopCluster(myCluster)"
+  },
+  {
+    "objectID": "q3.html",
+    "href": "q3.html",
+    "title": "Question 3",
+    "section": "",
+    "text": "N &lt;- 50 # Sample size\ndat &lt;- rexp(n = N, rate = 1) # Random sample from the exponential distribution\n\nB &lt;- 10000 # Number of bootstrap samples\nmeanVector &lt;- foreach(i=1:B, .combine=\"c\") %do% \n    {\n        S &lt;- sample(x = dat, size = N, replace = TRUE) # Bootstrap sample\n        mean(S) # Bootstrap sample mean\n    }\n\n# Sample mean\nsampleMean &lt;- mean(dat)\nkable(x = sampleMean, col.names = c(\"Sample Mean\"))\n\n\n\n\nSample Mean\n\n\n\n\n0.8728675\n\n\n\n\n# Bootstrap mean estimate\nbootstrapMean &lt;- mean(meanVector)\nkable(x = bootstrapMean, col.names = c(\"Bootstrap Mean Estimate\"))\n\n\n\n\nBootstrap Mean Estimate\n\n\n\n\n0.8725018\n\n\n\n\n# Bias estimate\nbias &lt;- bootstrapMean - sampleMean\nkable(x = bias, col.names = c(\"Bias Estimate\"))\n\n\n\n\nBias Estimate\n\n\n\n\n-0.0003656\n\n\n\n\n# Standard error estimate\nse &lt;- sd(meanVector)\nkable(x = se, col.names = c(\"Standard Error Estimate\"))\n\n\n\n\nStandard Error Estimate\n\n\n\n\n0.1188905\n\n\n\n\n# 95% Percentile confidence interval\nci &lt;- quantile(x = meanVector, c(0.025, 0.975))\nkable(x = ci, col.names = c(\"95% Percentile Confidence Interval\"))\n\n\n\n\n\n95% Percentile Confidence Interval\n\n\n\n\n2.5%\n0.6476427\n\n\n97.5%\n1.1120816"
+  },
+  {
+    "objectID": "q2.html",
+    "href": "q2.html",
+    "title": "Question 2",
+    "section": "",
+    "text": "coreNumber &lt;- detectCores() # Get number of cores in the computing device\nmyCluster &lt;- makeCluster(coreNumber - 1) # Set n-1 of those cores for computing\nregisterDoParallel(myCluster) # Register these cores for computing\n\ndat &lt;- galaxies # Galaxies data set from the MASS library\n\nclusterExport(myCluster, \"dat\") # Copy the data across the allocated cores\n\nN &lt;- 1000 # Number of bootstrap iterations\nmedianVector &lt;- numeric(N) # Stores the bootstrapped median estimates\n\nf.foreach &lt;- function() # Parallel bootstrapping\n    {\n        medianVector &lt;&lt;- foreach(i = 1:N, .combine = \"c\") %dopar% \n        {\n            S &lt;- sample(x = dat, size = length(dat), replace = TRUE)\n            median(x = S) # Find the median for this bootstrap sample\n        }\n}\n\nf.for &lt;- function() # Serial bootstrapping\n    {   \n        for(i in 1:N)\n            {\n                S &lt;- sample(x = dat, size = length(dat), replace = TRUE)\n                medianVector[i] &lt;&lt;- median(x = S)\n            }\n    }\n\nsystem.time(f.foreach()) # Parallel Performance\n\n   user  system elapsed \n   0.23    0.04    0.28 \n\nsystem.time(f.for()) # Serial Performance\n\n   user  system elapsed \n   0.03    0.00    0.01 \n\n# Processing time for parallel computing exceeds processing time for serial comp\n# -uting\n\n# Bias\nsampleMedian &lt;- median(x = dat)\nkable(x = sampleMedian, col.names = c(\"Sample Median\"))\n\n\n\n\nSample Median\n\n\n\n\n20833.5\n\n\n\n\nbootstrapMedian &lt;- mean(x = medianVector)\nkable(x = bootstrapMedian, col.names = c(\"Bootstrap Median Estimate\"))\n\n\n\n\nBootstrap Median Estimate\n\n\n\n\n20876.23\n\n\n\n\nbias &lt;- bootstrapMedian - sampleMedian\nkable(x = bias, col.names = c(\"Bias Estimate\"))\n\n\n\n\nBias Estimate\n\n\n\n\n42.7265\n\n\n\n\n# Standard Error\nse &lt;- sd(medianVector)\nkable(x = se, col.names = c(\"Standard Error Estimate\"))\n\n\n\n\nStandard Error Estimate\n\n\n\n\n523.4888\n\n\n\n\n# 95% Percentile Confidence Interval\nci &lt;- quantile(x = medianVector, c(0.025, 0.975))\nkable(x = ci, col.names = c(\"95% Percentile Confidence Interval\"))\n\n\n\n\n\n95% Percentile Confidence Interval\n\n\n\n\n2.5%\n20174.89\n\n\n97.5%\n21960.00\n\n\n\n\nstopCluster(myCluster) # Close the cluster"
+  },
+  {
+    "objectID": "q4.html",
+    "href": "q4.html",
+    "title": "Question 4",
+    "section": "",
+    "text": "set.seed(1234)\n\n# Generate 3 vectors of size 5 from the normal distribution\nnormalVector &lt;- irnorm(n = 5, mean = 0, sd = 1, count = 3)\n\nmaximumVector &lt;- foreach(i = 1:3, .combine = \"c\") %do% \n    {\n        max(nextElem(normalVector)) # Get the next vector and find its maximum\n    }\n\nkable(x = maximumVector, col.names = c(\"Column Maximums\"))\n\n\n\n\nColumn Maximums\n\n\n\n\n1.0844412\n\n\n0.5060559\n\n\n0.9594941"
+  }
+]
