@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Sbonelo Gumede">
-<meta name="dcterms.date" content="2025-03-09">
+<meta name="dcterms.date" content="2025-03-13">
 
 <title>Question 1 – Statistical Computing</title>
 <style>
@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -150,7 +184,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">March 9, 2025</p>
+      <p class="date">March 13, 2025</p>
     </div>
   </div>
   
@@ -162,6 +196,429 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">foreach</span>(<span class="at">i=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, <span class="at">.combine=</span><span class="st">"rbind"</span>) <span class="sc">%do%</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        S <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="at">n =</span> <span class="dv">100</span>, <span class="at">rate =</span> <span class="dv">1</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">c</span>(<span class="fu">mean</span>(S), <span class="fu">var</span>(S))</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(results) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Mean"</span>, <span class="st">"Variance"</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(results) <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Mean</th>
+<th style="text-align: right;">Variance</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1.0827506</td>
+<td style="text-align: right;">0.9965731</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.8453451</td>
+<td style="text-align: right;">0.6882944</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1.0419317</td>
+<td style="text-align: right;">0.8723723</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1.1308284</td>
+<td style="text-align: right;">1.4440074</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1.0396586</td>
+<td style="text-align: right;">0.9116125</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1.0726473</td>
+<td style="text-align: right;">1.2284185</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1.0527143</td>
+<td style="text-align: right;">1.2666333</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.9547942</td>
+<td style="text-align: right;">0.8055204</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1.0029685</td>
+<td style="text-align: right;">1.2951649</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.8606381</td>
+<td style="text-align: right;">0.5718827</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.8736713</td>
+<td style="text-align: right;">0.6781141</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1.1475118</td>
+<td style="text-align: right;">1.2947726</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.9608615</td>
+<td style="text-align: right;">1.1744800</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1.2942995</td>
+<td style="text-align: right;">1.3577474</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.9740392</td>
+<td style="text-align: right;">0.7593594</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1.2064476</td>
+<td style="text-align: right;">1.8878306</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1.0416930</td>
+<td style="text-align: right;">0.9714231</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.9357591</td>
+<td style="text-align: right;">0.8040410</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.9223724</td>
+<td style="text-align: right;">1.0927168</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.9348340</td>
+<td style="text-align: right;">0.9639536</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1.3266091</td>
+<td style="text-align: right;">2.6592767</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1.0516408</td>
+<td style="text-align: right;">1.1884297</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1.0806904</td>
+<td style="text-align: right;">1.2964386</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.8598242</td>
+<td style="text-align: right;">0.7181621</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.9884458</td>
+<td style="text-align: right;">0.6992367</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.9784197</td>
+<td style="text-align: right;">0.9136894</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.9335910</td>
+<td style="text-align: right;">0.7679833</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.9270676</td>
+<td style="text-align: right;">1.0486034</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1.1304755</td>
+<td style="text-align: right;">1.1991698</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1.1062578</td>
+<td style="text-align: right;">1.4644122</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.9528994</td>
+<td style="text-align: right;">0.7575913</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1.0432925</td>
+<td style="text-align: right;">0.8474089</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.9882566</td>
+<td style="text-align: right;">1.2540334</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.9585885</td>
+<td style="text-align: right;">0.9654003</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.9671749</td>
+<td style="text-align: right;">0.8200149</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.8983244</td>
+<td style="text-align: right;">0.7523789</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.9151576</td>
+<td style="text-align: right;">0.8905351</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1.1282054</td>
+<td style="text-align: right;">0.9317209</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.9810045</td>
+<td style="text-align: right;">1.1913243</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1.0311976</td>
+<td style="text-align: right;">0.9584290</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1.0825813</td>
+<td style="text-align: right;">0.9217099</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1.0526187</td>
+<td style="text-align: right;">0.9413473</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.9532645</td>
+<td style="text-align: right;">0.8951161</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.9425200</td>
+<td style="text-align: right;">1.1694731</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1.0044959</td>
+<td style="text-align: right;">0.9981196</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.9048681</td>
+<td style="text-align: right;">0.7591322</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.9343599</td>
+<td style="text-align: right;">1.1232216</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1.0771285</td>
+<td style="text-align: right;">0.9120452</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.9937348</td>
+<td style="text-align: right;">0.8532903</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1.0180863</td>
+<td style="text-align: right;">1.0992419</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1.0595693</td>
+<td style="text-align: right;">1.1177769</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.9067712</td>
+<td style="text-align: right;">0.5365624</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1.1630579</td>
+<td style="text-align: right;">1.3839023</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1.0349644</td>
+<td style="text-align: right;">0.9170299</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.8930765</td>
+<td style="text-align: right;">0.6687058</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.9722632</td>
+<td style="text-align: right;">0.6846369</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1.0756503</td>
+<td style="text-align: right;">0.9508061</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.9870721</td>
+<td style="text-align: right;">0.9610708</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1.0814501</td>
+<td style="text-align: right;">1.0957361</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.8411033</td>
+<td style="text-align: right;">0.7027457</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.8909359</td>
+<td style="text-align: right;">0.7760849</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.9242116</td>
+<td style="text-align: right;">0.8022308</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1.0447007</td>
+<td style="text-align: right;">1.5649353</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.7873329</td>
+<td style="text-align: right;">0.5242584</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1.3142775</td>
+<td style="text-align: right;">1.4283362</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1.0361609</td>
+<td style="text-align: right;">1.1461439</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.7639876</td>
+<td style="text-align: right;">0.4594847</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.9488380</td>
+<td style="text-align: right;">0.7793831</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.8822508</td>
+<td style="text-align: right;">0.8101314</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.9415935</td>
+<td style="text-align: right;">0.8042258</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1.1548067</td>
+<td style="text-align: right;">1.2775756</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1.0895655</td>
+<td style="text-align: right;">1.1269586</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1.0046116</td>
+<td style="text-align: right;">0.8055513</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.9885617</td>
+<td style="text-align: right;">0.9236318</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.9835089</td>
+<td style="text-align: right;">0.8890867</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.8248409</td>
+<td style="text-align: right;">0.6249320</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1.1779427</td>
+<td style="text-align: right;">1.1503257</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.9298873</td>
+<td style="text-align: right;">0.7381086</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.8875968</td>
+<td style="text-align: right;">0.8475602</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1.0950911</td>
+<td style="text-align: right;">1.1126847</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1.0132051</td>
+<td style="text-align: right;">0.7812125</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.9584936</td>
+<td style="text-align: right;">1.1870641</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.9905348</td>
+<td style="text-align: right;">0.7213548</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.9663419</td>
+<td style="text-align: right;">0.8174452</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.9485220</td>
+<td style="text-align: right;">0.9452582</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.9596900</td>
+<td style="text-align: right;">0.6125321</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1.1149441</td>
+<td style="text-align: right;">1.0923087</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.9289375</td>
+<td style="text-align: right;">0.7405039</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1.0463454</td>
+<td style="text-align: right;">1.3476912</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1.0418395</td>
+<td style="text-align: right;">0.9648890</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.9959590</td>
+<td style="text-align: right;">1.0887518</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.9397903</td>
+<td style="text-align: right;">0.9562129</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1.1213649</td>
+<td style="text-align: right;">1.4112124</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.9261270</td>
+<td style="text-align: right;">0.7980945</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.9765410</td>
+<td style="text-align: right;">1.0068409</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1.2153660</td>
+<td style="text-align: right;">1.7587396</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.9870923</td>
+<td style="text-align: right;">1.1868369</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1.0658846</td>
+<td style="text-align: right;">1.1474115</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1.1377639</td>
+<td style="text-align: right;">1.3050966</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.9552085</td>
+<td style="text-align: right;">0.9041848</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 
 
 

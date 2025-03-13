@@ -15,41 +15,61 @@ opts_chunk$set(echo=FALSE, include=FALSE)
 ```
 
 ```{r, echo=TRUE, include=TRUE}
+library(doParallel)
+library(foreach)
+library(knitr)
+library(MASS)
+
 coreNumber <- detectCores() # Get number of cores in the computing device
-myCluster <- makeCluster(coreNumber - 1) # Set n-1 of those cores for computing
+myCluster <- makeCluster(round((coreNumber / 2))) # Set round n/2 of those cores for computing
 registerDoParallel(myCluster) # Register these cores for computing
 
 dat <- galaxies # Galaxies data set from the MASS library
 
 clusterExport(myCluster, "dat") # Copy the data across the allocated cores
 
-N <- 1000 # Number of bootstrap iterations
-medianVector <- numeric(N) # Stores the bootstrapped median estimates
-
-f.foreach <- function() # Parallel bootstrapping
-	{
-		medianVector <<- foreach(i = 1:N, .combine = "c") %dopar% 
+f.foreach <- function(N) # Parallel bootstrapping
+{
+	Vector <- foreach(i = 1:N, .combine = "c") %dopar% 
 		{
 			S <- sample(x = dat, size = length(dat), replace = TRUE)
 			median(x = S) # Find the median for this bootstrap sample
 		}
+	return(Vector)
 }
 
-f.for <- function() # Serial bootstrapping
-	{	
-		for(i in 1:N)
-			{
-				S <- sample(x = dat, size = length(dat), replace = TRUE)
-				medianVector[i] <<- median(x = S)
-			}
+f.for <- function(N) # Serial bootstrapping
+{	Vector <- numeric(N)
+	for(i in 1:N)
+	{
+		S <- sample(x = dat, size = length(dat), replace = TRUE)
+		Vector[i] <- median(x = S)
 	}
+	return(Vector)
+}
+```
 
-system.time(f.foreach()) # Parallel Performance
-system.time(f.for()) # Serial Performance
-# Processing time for parallel computing exceeds processing time for serial comp
-# -uting
+```{r, echo=TRUE, include=TRUE}
+kable(x = system.time(f.foreach(N = 1000)), col.names = c("Metric", "Parallel Performance"))
+kable(x = system.time(f.for(N = 1000)), col.names = c("Metric", "Serial Performance"))
+```
 
+Processing time for parallel computing exceeds processing time for serial computing.<br> 
+This is because the problem is too small. The total time for serial execution is smaller than that of first allocating workers, then completing this task in parallel.<br> 
+We expect parallel performance to improve as the problem gets very large because then the time taken to run the problem serially would exceed the time taken to execute the problem in parallel.<br> 
+Let N = 100 000
+
+```{r, echo=TRUE, include=TRUE}
+kable(x = system.time(f.foreach(N = 100000)), col.names = c("Metric", "Parallel Performance"))
+kable(x = system.time(f.for(N = 100000)), col.names = c("Metric", "Serial Performance"))
+```
+
+No improvement in parallel performance.<br> 
+This is likely because of the overhead of allocating workers to different cores and concatenating the results.
+
+```{r, echo=TRUE, include=TRUE}
 # Bias
+medianVector <- f.for(N = 1000)
 sampleMedian <- median(x = dat)
 kable(x = sampleMedian, col.names = c("Sample Median"))
 bootstrapMedian <- mean(x = medianVector)

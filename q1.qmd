@@ -19,7 +19,6 @@ results <- foreach(i=1:100, .combine="rbind") %do%
 		c(mean(S), var(S))
 	}
 
-colnames(results, do.NULL = FALSE)
 colnames(results) <- c("Mean", "Variance")
 rownames(results) <- 1:100
 kable(results)

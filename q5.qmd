@@ -45,9 +45,9 @@ f.replicate <- function()
 	maximumVector <<- replicate(n = 3, expr = max(nextElem(normalVector)))
 }
 
-system.time(f.foreach())
-system.time(f.parLapply())
-system.time(f.replicate())
+kable(x = system.time(f.foreach()), col.names = c("Metric", "foreach"))
+kable(x = system.time(f.parLapply()), col.names = c("Metric", "parLapply"))
+kable(x = system.time(f.replicate()), col.names = c("Metric", "replicate"))
 
 stopCluster(myCluster)
 ```
